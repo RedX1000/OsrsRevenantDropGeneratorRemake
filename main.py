@@ -135,7 +135,7 @@ class Application:
         skull = 1  # todo: make getters for these
         kills = 1  # todo: make getters for these
         level = 1  # todo: make getters for these
-        print(self.revenant_data_var.get())
+        # print(self.revenant_data_var.get())
         print(self.revenant_data[self.revenant_data_var.get()])
         totalKills = 0
 
