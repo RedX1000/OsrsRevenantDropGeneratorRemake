@@ -7,6 +7,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import math
 import random
+import time
 
 
 def resource_path(relative_path):
@@ -65,6 +66,8 @@ class Application:
         self.lbl_title.pack(padx=20)
         self.lbl_desc = tk.Label(c_left_top, text="Enter the amount of kills, choose whether you're skulled or not, select the revenant, and run the code!", font=self.desc_font, wraplength=450, background=self.left_canvas_top_color)
         self.lbl_desc.pack()
+        self.lbl_disclaimer = tk.Label(c_left_top, text="(If it freezes it's running)", font=self.stand_font_small, wraplength=450, background=self.left_canvas_top_color)
+        self.lbl_disclaimer.pack()
         c_left_top.pack(side="top")
 
         c_info = tk.Canvas(c_left, width=500, background=self.left_canvas_color, highlightbackground=self.left_canvas_color, bd=0, highlightthickness=0, relief='ridge')
@@ -99,11 +102,12 @@ class Application:
         self.btn_start.bind("<Leave>", lambda e: self.btn_start.config(bg="#30d7bb"))
         c_info.pack(side="top", pady=20)
 
+        # Old color for c_image and revenant_photo_lbl was #219581
         c_bottom = tk.Canvas(c_left, width=365, height=365, background="#13564a", highlightbackground="#13564a", bd=5, borderwidth=5)
-        c_image = tk.Canvas(c_bottom, width=350, height=350, background="#219581", highlightbackground="#219581", bd=0, highlightthickness=0, relief='ridge')
+        c_image = tk.Canvas(c_bottom, width=350, height=350, background="#1d8674", highlightbackground="#1d8674", bd=0, highlightthickness=0, relief='ridge')
         self.revenant_image = PIL.Image.open("images/revenants/Select a revenant.png")
         self.revenant_photo_image = PIL.ImageTk.PhotoImage(self.revenant_image)
-        self.revenant_photo_lbl = tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#219581", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge')
+        self.revenant_photo_lbl = tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#1d8674", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge')
         self.revenant_photo_lbl.pack(padx=10, pady=10)
         c_image.pack(side="top", padx=5, pady=5)
         c_bottom.pack(side="top", pady=(5, 35))
@@ -130,48 +134,68 @@ class Application:
         self.revenant_photo_lbl.image = img
 
     def menu(self):
-        print("menu")
+        if self.revenant_data_var.get() == "Select a revenant":
+            self.lbl_status['bg'] = "Orange"
+            self.lbl_status['text'] = "Choose a revenant"
 
-        skull = 1  # todo: make getters for these
-        kills = 1  # todo: make getters for these
-        level = 1  # todo: make getters for these
-        # print(self.revenant_data_var.get())
-        print(self.revenant_data[self.revenant_data_var.get()])
-        totalKills = 0
+        else:
+            try:
+                self.lbl_status['bg'] = "yellow"
+                self.lbl_status['text'] = "Running..."
+                self.lbl_status.update_idletasks()
+                time.sleep(10)
+                print("menu")
 
-        totalDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        totalCalculatedDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                skull = 1  # todo: make getters for these
+                kills = 1  # todo: make getters for these
+                level = 1  # todo: make getters for these
+                # print(self.revenant_data_var.get())
+                print(self.revenant_data[self.revenant_data_var.get()])
+                totalKills = 0
 
-        for i in range(0, kills):
-            totalDrops[0] += 1
-            totalDrops[1] += 1
+                totalDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                totalCalculatedDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-            chanceA = 0.0
-            chanceB = 0.0
+                for i in range(0, kills):
+                    totalDrops[0] += 1
+                    totalDrops[1] += 1
 
-            clampedLevel = level
+                    chanceA = 0.0
+                    chanceB = 0.0
 
-            # Formula for chanceA
-            chanceA = 2200 / int(math.sqrt(clampedLevel))
-            chanceA = int(chanceA)
+                    clampedLevel = level
 
-            # Formula for chanceB
-            chanceB = 15 + (math.pow((level + 60), 2) / 200)
-            chanceB = int(chanceB)
+                    # Formula for chanceA
+                    chanceA = 2200 / int(math.sqrt(clampedLevel))
+                    chanceA = int(chanceA)
 
-            # This will randomize a number,
-            # A is set between 0 and (chanceA - 1) inclusive
-            a = int(random.randint(0, (chanceA - 1)))
+                    # Formula for chanceB
+                    chanceB = 15 + (math.pow((level + 60), 2) / 200)
+                    chanceB = int(chanceB)
 
-            if (a == 0):
-                self.good_drops(skull, totalDrops)
-            elif a >= 1 and a <= chanceB:
-                self.mediocre_drops(totalDrops)
+                    # This will randomize a number,
+                    # A is set between 0 and (chanceA - 1) inclusive
+                    a = int(random.randint(0, (chanceA - 1)))
 
-            totalKills += 1
-            # print(totalKills)
+                    if (a == 0):
+                        self.good_drops(skull, totalDrops)
+                    elif a >= 1 and a <= chanceB:
+                        self.mediocre_drops(totalDrops)
+
+                    totalKills += 1
+                    # print(totalKills)
+
+                self.lbl_status['bg'] = "lime green"
+                self.lbl_status['text'] = "         Finished!         "
+
+            except Exception as e:
+                print(e)
+                self.lbl_status['bg'] = "OrangeRed2"
+                self.lbl_status['text'] = "Some Crash Occurred"
+                self.lbl_status.update_idletasks()
+
 
     def good_drops(self, skull, total_drops):
         pass
