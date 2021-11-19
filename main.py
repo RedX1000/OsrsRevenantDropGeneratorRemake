@@ -101,9 +101,10 @@ class Application:
 
         c_bottom = tk.Canvas(c_left, width=365, height=365, background="#13564a", highlightbackground="#13564a", bd=5, borderwidth=5)
         c_image = tk.Canvas(c_bottom, width=350, height=350, background="#219581", highlightbackground="#219581", bd=0, highlightthickness=0, relief='ridge')
-        self.revenant_image = PIL.Image.open("images/other/Select a revenant.png")
+        self.revenant_image = PIL.Image.open("images/revenants/Select a revenant.png")
         self.revenant_photo_image = PIL.ImageTk.PhotoImage(self.revenant_image)
-        tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#219581", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge').pack(padx=10, pady=10)
+        self.revenant_photo_lbl = tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#219581", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge')
+        self.revenant_photo_lbl.pack(padx=10, pady=10)
         c_image.pack(side="top", padx=5, pady=5)
         c_bottom.pack(side="top", pady=(5, 35))
 
@@ -123,8 +124,10 @@ class Application:
         print("out")
 
     def change_picture(self):
-        print("In change picture")
-        pass
+        # https://stackoverflow.com/questions/3482081
+        img = PIL.ImageTk.PhotoImage(Image.open("images/revenants/"+self.revenant_data_var.get()+".png"))
+        self.revenant_photo_lbl.configure(image=img)
+        self.revenant_photo_lbl.image = img
 
     def menu(self):
         print("menu")
