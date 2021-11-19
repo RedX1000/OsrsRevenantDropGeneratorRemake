@@ -36,7 +36,8 @@ class Application:
         self.left_canvas_top_color = "#129680"
         self.left_label_color = "#17bca1"
 
-        self.revenant_data = {'Revenant imp': 7,
+        self.revenant_data = {'Select a revenant': 0,
+                              'Revenant imp': 7,
                               'Revenant goblin': 15,
                               'Revenant pyrefiend': 52,
                               'Revenant hobgoblin': 60,
@@ -57,7 +58,6 @@ class Application:
         self.var_skulled = tk.IntVar(parent)
         self.var_skulled.set(0)
 
-
         c_left = tk.Canvas(main_frame, background=self.left_canvas_color, highlightbackground=self.left_canvas_color, bd=0, highlightthickness=0, relief='ridge')
 
         c_left_top = tk.Canvas(c_left, background=self.left_canvas_top_color, highlightbackground=self.left_canvas_top_color, bd=0)
@@ -70,7 +70,7 @@ class Application:
         c_info = tk.Canvas(c_left, width=500, background=self.left_canvas_color, highlightbackground=self.left_canvas_color, bd=0, highlightthickness=0, relief='ridge')
         self.lbl_rev = tk.Label(c_info, background=self.left_label_color, highlightbackground=self.left_label_color, text="Revenant being killed", font=self.stand_font_bold)
         self.lbl_rev.grid(row=0, column=0, padx=20, pady=10)
-        self.revenant_options = tk.OptionMenu(c_info, self.revenant_data_var, *self.revenant_data)
+        self.revenant_options = tk.OptionMenu(c_info, self.revenant_data_var, *self.revenant_data, command=lambda e: self.change_picture())
         self.revenant_options.config(bg="#30d7bb", fg="black", highlightbackground=self.left_label_color, activebackground="#17bda2", font=self.stand_font_small_bold, width=19)
         self.revenant_menu = c_info.nametowidget(self.revenant_options.menuname)
         self.revenant_menu.config(font=self.stand_font_small)
@@ -101,7 +101,7 @@ class Application:
 
         c_bottom = tk.Canvas(c_left, width=365, height=365, background="#13564a", highlightbackground="#13564a", bd=5, borderwidth=5)
         c_image = tk.Canvas(c_bottom, width=350, height=350, background="#219581", highlightbackground="#219581", bd=0, highlightthickness=0, relief='ridge')
-        self.revenant_image = PIL.Image.open("images/other/Unknown_Ghost.png")
+        self.revenant_image = PIL.Image.open("images/other/Select a revenant.png")
         self.revenant_photo_image = PIL.ImageTk.PhotoImage(self.revenant_image)
         tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#219581", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge').pack(padx=10, pady=10)
         c_image.pack(side="top", padx=5, pady=5)
@@ -123,6 +123,7 @@ class Application:
         print("out")
 
     def change_picture(self):
+        print("In change picture")
         pass
 
     def menu(self):
@@ -131,6 +132,8 @@ class Application:
         skull = 1  # todo: make getters for these
         kills = 1  # todo: make getters for these
         level = 1  # todo: make getters for these
+        print(self.revenant_data_var.get())
+        print(self.revenant_data[self.revenant_data_var.get()])
         totalKills = 0
 
         totalDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
