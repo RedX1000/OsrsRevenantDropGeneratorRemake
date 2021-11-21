@@ -219,7 +219,7 @@ class Application:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.iconbitmap(resource_path(""))
+    root.iconbitmap(resource_path("images/revenants/revenant_imp.ico"))
     root.title("Osrs Revenant Drop Generator: Remake")
     a = Application(root)
     root.mainloop()
