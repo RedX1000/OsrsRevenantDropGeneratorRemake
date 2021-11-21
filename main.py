@@ -1,3 +1,17 @@
+"""
+#     |==============================================================|
+#     |Formula made by Mod Ash                                       |
+#     |Code written by CrownMauler/Red X 500/RedX1000                |
+#     |Contact me at Discord: RedX1000#3655                          |
+#     |Check my Github: https://www.github.com/RedX1000              |
+#     |Program is based on this                                      |
+#     |https://pbs.twimg.com/media/DpbCbE_WkAYCD6L.jpg:large         |
+#     |This is a complete rewrite of the original program            |
+#     |Updated drop rates pulled from the OSRS Wiki:                 |
+#     |https://oldschool.runescape.wiki/w/Template:Revenants/Drops   |
+#     |==============================================================|
+"""
+
 import os
 import sys
 import tkinter as tk
@@ -57,7 +71,7 @@ class Application:
         self.var_entry_kills.set(0)
 
         self.var_skulled = tk.IntVar(parent)
-        self.var_skulled.set(0)
+        self.var_skulled.set(2)
 
         c_left = tk.Canvas(main_frame, background=self.left_canvas_color, highlightbackground=self.left_canvas_color, bd=0, highlightthickness=0, relief='ridge')
 
@@ -112,6 +126,7 @@ class Application:
         c_image.pack(side="top", padx=5, pady=5)
         c_bottom.pack(side="top", pady=(5, 35))
 
+
         c_left.pack(side="left")
 
 
@@ -143,15 +158,12 @@ class Application:
                 self.lbl_status['bg'] = "yellow"
                 self.lbl_status['text'] = "Running..."
                 self.lbl_status.update_idletasks()
-                time.sleep(10)
+                time.sleep(2)
                 print("menu")
 
-                skull = 1  # todo: make getters for these
-                kills = 1  # todo: make getters for these
-                level = 1  # todo: make getters for these
-                # print(self.revenant_data_var.get())
-                print(self.revenant_data[self.revenant_data_var.get()])
-                totalKills = 0
+                skull = self.var_skulled.get()  # todo: make getters for these
+                kills = self.var_entry_kills.get()  # todo: make getters for these
+                level = self.revenant_data[self.revenant_data_var.get()]  # todo: make getters for these
 
                 totalDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -161,7 +173,7 @@ class Application:
                 for i in range(0, kills):
                     totalDrops[0] += 1
                     totalDrops[1] += 1
-
+                    print(i)
                     chanceA = 0.0
                     chanceB = 0.0
 
@@ -179,16 +191,18 @@ class Application:
                     # A is set between 0 and (chanceA - 1) inclusive
                     a = int(random.randint(0, (chanceA - 1)))
 
+                    print(chanceA)
+                    print(a)
+                    print(chanceB)
+
                     if (a == 0):
                         self.good_drops(skull, totalDrops)
                     elif a >= 1 and a <= chanceB:
                         self.mediocre_drops(totalDrops)
 
-                    totalKills += 1
-                    # print(totalKills)
 
                 self.lbl_status['bg'] = "lime green"
-                self.lbl_status['text'] = "         Finished!         "
+                self.lbl_status['text'] = "   Finished!   "
 
             except Exception as e:
                 print(e)
