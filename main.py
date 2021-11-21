@@ -161,9 +161,9 @@ class Application:
                 time.sleep(2)
                 print("menu")
 
-                skull = self.var_skulled.get()  # todo: make getters for these
-                kills = self.var_entry_kills.get()  # todo: make getters for these
-                level = self.revenant_data[self.revenant_data_var.get()]  # todo: make getters for these
+                skull = self.var_skulled.get()
+                kills = self.var_entry_kills.get()
+                level = self.revenant_data[self.revenant_data_var.get()]
 
                 totalDrops = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
