@@ -15,6 +15,8 @@
 import os
 import sys
 import tkinter as tk
+from os import listdir
+from os.path import isfile, join
 import PIL
 from tkinter import font
 from tkinter import ttk
@@ -38,7 +40,7 @@ def resource_path(relative_path):
 
 class Application:
     def __init__(self, parent):
-        main_frame = tk.Frame(parent, background="gray65")
+        main_frame = tk.Frame(parent, background="gray62")
         main_frame.pack()
 
         self.title_font = font.Font(family="Arial", size=20, weight=font.BOLD)
@@ -63,6 +65,16 @@ class Application:
                               'Revenant dark beast': 120,
                               'Revenant knight': 126,
                               'Revenant dragon': 135}
+
+        with open("images/items/item_list.txt", 'r') as f:
+            self.item_list = [line.strip() for line in f]
+        self.img_item_list = []
+        for i in range(len(self.item_list)):
+            if i == 0:
+                temp = self.item_list[0]
+            else:
+                temp = tk.PhotoImage(file=("images/items/" + self.item_list[i]))
+            self.img_item_list.append(temp)
 
         self.revenant_data_var = tk.StringVar(parent)
         self.revenant_data_var.set("Select a revenant")
@@ -126,13 +138,303 @@ class Application:
         c_image.pack(side="top", padx=5, pady=5)
         c_bottom.pack(side="top", pady=(5, 35))
 
-
         c_left.pack(side="left")
 
 
-        c_right = tk.Canvas(main_frame, background="gray65", highlightbackground="light gray", bd=0)
+        c_right = tk.Canvas(main_frame, background="gray62", highlightbackground="light gray", bd=0, highlightthickness=0, relief='ridge')
 
-        c_right.pack(side="right")
+        self.title_x_spacing = (5, 5)
+        self.title_y_spacing = (6, 6)
+        self.grid_x_spacing = (10, 5)
+        self.grid_y_spacing = (2, 2)
+
+        self.lbl_loot_title = tk.Label(c_right, text="                  Here is your loot!                  ", font=self.title_font, background="gray50")
+        self.lbl_loot_title.pack(side="top")
+
+        self.lbl_currency_title = tk.Label(c_right, text="  Ether & Coins  ", font=self.desc_font, background="gray50")
+        self.lbl_currency_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_currency = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ether_img = tk.Label(c_currency, image=self.img_item_list[42], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ether_value = tk.Label(c_currency, text="0", font=self.stand_font_small, background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ether_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_ether_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_coins_img = tk.Label(c_currency, image=self.img_item_list[25], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_coins_value = tk.Label(c_currency, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_coins_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_coins_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_currency.pack(side="top", anchor="w")
+        for i in range(4):
+            if i % 2 == 0:
+                c_currency.grid_columnconfigure(i, minsize=35)
+            else:
+                c_currency.grid_columnconfigure(i, minsize=80)
+
+
+        self.lbl_weapons_title = tk.Label(c_right, text="  Weapons & Statuettes  ", font=self.desc_font, background="gray50")
+        self.lbl_weapons_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_weapons_statuettes = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_avarice_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[2], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_avarice_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_avarice_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_avarice_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_bow_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[26], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_bow_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_bow_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_bow_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_sceptre_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[51], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_sceptre_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_sceptre_img.grid(row=1, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_sceptre_value.grid(row=1, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_chainmace_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[53], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_chainmace_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_chainmace_img.grid(row=1, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_chainmace_value.grid(row=1, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_emblem_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[5], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_emblem_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_emblem_img.grid(row=2, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_emblem_value.grid(row=2, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_totem_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[9], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_totem_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_totem_img.grid(row=2, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_totem_value.grid(row=2, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_crystal_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[3], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_crystal_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_crystal_img.grid(row=2, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_crystal_value.grid(row=2, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_statuette_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[8], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_statuette_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_statuette_img.grid(row=2, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_statuette_value.grid(row=2, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_medallion_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[6], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_medallion_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_medallion_img.grid(row=3, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_medallion_value.grid(row=3, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_effigy_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[4], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_effigy_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_effigy_img.grid(row=3, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_effigy_value.grid(row=3, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_relic_img = tk.Label(c_weapons_statuettes, image=self.img_item_list[7], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_relic_value = tk.Label(c_weapons_statuettes, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_relic_img.grid(row=3, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_relic_value.grid(row=3, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_weapons_statuettes.pack(side="top", anchor="w")
+        for i in range(8):
+            if i % 2 == 0:
+                c_weapons_statuettes.grid_columnconfigure(i, minsize=35)
+            else:
+                c_weapons_statuettes.grid_columnconfigure(i, minsize=80)
+
+        self.lbl_equipment_title = tk.Label(c_right, text="  Equipment  ", font=self.desc_font, background="gray50")
+        self.lbl_equipment_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_equipment = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_brace_img = tk.Label(c_equipment, image=self.img_item_list[23], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_brace_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_brace_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_brace_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_staff_img = tk.Label(c_equipment, image=self.img_item_list[10], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_staff_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_staff_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_staff_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rhelm_img = tk.Label(c_equipment, image=self.img_item_list[43], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rhelm_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rhelm_img.grid(row=1, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rhelm_value.grid(row=1, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rplate_img = tk.Label(c_equipment, image=self.img_item_list[46], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rplate_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rplate_img.grid(row=1, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rplate_value.grid(row=1, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rlegs_img = tk.Label(c_equipment, image=self.img_item_list[46], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rlegs_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rlegs_img.grid(row=2, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rlegs_value.grid(row=2, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rkite_img = tk.Label(c_equipment, image=self.img_item_list[44], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rkite_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rkite_img.grid(row=2, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rkite_value.grid(row=2, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rhammer_img = tk.Label(c_equipment, image=self.img_item_list[47], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rhammer_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rhammer_img.grid(row=2, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rhammer_value.grid(row=2, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dds_img = tk.Label(c_equipment, image=self.img_item_list[29], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dds_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dds_img.grid(row=2, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dds_value.grid(row=2, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dlong_img = tk.Label(c_equipment, image=self.img_item_list[30], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dlong_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dlong_img.grid(row=3, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dlong_value.grid(row=3, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dlegs_img = tk.Label(c_equipment, image=self.img_item_list[32], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dlegs_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dlegs_img.grid(row=3, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dlegs_value.grid(row=3, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dskirt_img = tk.Label(c_equipment, image=self.img_item_list[33], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dskirt_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dskirt_img.grid(row=3, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dskirt_value.grid(row=3, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dhelm_img = tk.Label(c_equipment, image=self.img_item_list[31], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dhelm_value = tk.Label(c_equipment, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dhelm_img.grid(row=3, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dhelm_value.grid(row=3, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_equipment.pack(side="top", anchor="w")
+        for i in range(8):
+            if i % 2 == 0:
+                c_equipment.grid_columnconfigure(i, minsize=35)
+            else:
+                c_equipment.grid_columnconfigure(i, minsize=80)
+
+
+        self.lbl_resources_title = tk.Label(c_right, text="  Resources  ", font=self.desc_font, background="gray50")
+        self.lbl_resources_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_resources = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_coal_img = tk.Label(c_resources, image=self.img_item_list[24], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_coal_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_coal_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_coal_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_runite_img = tk.Label(c_resources, image=self.img_item_list[49], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_runite_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_runite_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_runite_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_abar_img = tk.Label(c_resources, image=self.img_item_list[1], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_abar_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_abar_img.grid(row=1, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_abar_value.grid(row=1, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rbar_img = tk.Label(c_resources, image=self.img_item_list[48], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rbar_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_rbar_img.grid(row=1, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_rbar_value.grid(row=1, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dhide_img = tk.Label(c_resources, image=self.img_item_list[11], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dhide_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dhide_img.grid(row=2, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dhide_value.grid(row=2, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dstone_img = tk.Label(c_resources, image=self.img_item_list[52], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dstone_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dstone_img.grid(row=2, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dstone_value.grid(row=2, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_ylog_img = tk.Label(c_resources, image=self.img_item_list[54], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ylog_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ylog_img.grid(row=2, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_ylog_value.grid(row=2, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mlog_img = tk.Label(c_resources, image=self.img_item_list[37], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mlog_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mlog_img.grid(row=2, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mlog_value.grid(row=2, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mplank_img = tk.Label(c_resources, image=self.img_item_list[39], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mplank_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mplank_img.grid(row=3, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mplank_value.grid(row=3, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_yseed_img = tk.Label(c_resources, image=self.img_item_list[55], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_yseed_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_yseed_img.grid(row=3, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_yseed_value.grid(row=3, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mseed_img = tk.Label(c_resources, image=self.img_item_list[38], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mseed_value = tk.Label(c_resources, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_mseed_img.grid(row=3, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_mseed_value.grid(row=3, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_resources.pack(side="top", anchor="w")
+        for i in range(8):
+            if i % 2 == 0:
+                c_resources.grid_columnconfigure(i, minsize=35)
+            else:
+                c_resources.grid_columnconfigure(i, minsize=80)
+
+
+        self.lbl_resources_title = tk.Label(c_right, text="  Other & Tertiary  ", font=self.desc_font, background="gray50")
+        self.lbl_resources_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_other_tertiary = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_teleport_img = tk.Label(c_other_tertiary, image=self.img_item_list[41], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_teleport_value = tk.Label(c_other_tertiary, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_teleport_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_teleport_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_law_img = tk.Label(c_other_tertiary, image=self.img_item_list[35], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_law_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_law_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_law_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_death_img = tk.Label(c_other_tertiary, image=self.img_item_list[27], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_death_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_death_img.grid(row=1, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_death_value.grid(row=1, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_blood_img = tk.Label(c_other_tertiary, image=self.img_item_list[22], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_blood_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_blood_img.grid(row=1, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_blood_value.grid(row=1, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dstonetip_img = tk.Label(c_other_tertiary, image=self.img_item_list[28], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dstonetip_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_dstonetip_img.grid(row=2, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_dstonetip_value.grid(row=2, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_onyxtip_img = tk.Label(c_other_tertiary, image=self.img_item_list[40], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_onyxtip_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_onyxtip_img.grid(row=2, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_onyxtip_value.grid(row=2, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_lootbag_img = tk.Label(c_other_tertiary, image=self.img_item_list[36], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_lootbag_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_lootbag_img.grid(row=2, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_lootbag_value.grid(row=2, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_key_img = tk.Label(c_other_tertiary, image=self.img_item_list[34], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_key_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_key_img.grid(row=2, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_key_value.grid(row=2, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_enchant_img = tk.Label(c_other_tertiary, image=self.img_item_list[50], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_enchant_value = tk.Label(c_other_tertiary, text="0", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_enchant_img.grid(row=3, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_enchant_value.grid(row=3, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_other_tertiary.pack(side="top", anchor="w")
+        for i in range(8):
+            if i % 2 == 0:
+                c_other_tertiary.grid_columnconfigure(i, minsize=35)
+            else:
+                c_other_tertiary.grid_columnconfigure(i, minsize=80)
+
+        self.lbl_blighted_title = tk.Label(c_right, text="  Blighted  ", font=self.desc_font, background="gray50")
+        self.lbl_blighted_title.pack(side="top", padx=self.title_x_spacing, pady=self.title_y_spacing, anchor="w")
+        c_blighted = tk.Canvas(c_right, background="gray62", highlightbackground="gray", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_bind_img = tk.Label(c_blighted, image=self.img_item_list[14], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_bind_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_bind_img.grid(row=1, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_bind_value.grid(row=1, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_snare_img = tk.Label(c_blighted, image=self.img_item_list[18], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_snare_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_snare_img.grid(row=1, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_snare_value.grid(row=1, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_entangle_img = tk.Label(c_blighted, image=self.img_item_list[15], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_entangle_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_entangle_img.grid(row=1, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_entangle_value.grid(row=1, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_teleblock_img = tk.Label(c_blighted, image=self.img_item_list[20], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_teleblock_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_teleblock_img.grid(row=1, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_teleblock_value.grid(row=1, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_vengeance_img = tk.Label(c_blighted, image=self.img_item_list[21], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_vengeance_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_vengeance_img.grid(row=2, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_vengeance_value.grid(row=2, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_ice_img = tk.Label(c_blighted, image=self.img_item_list[12], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ice_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_ice_img.grid(row=2, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_ice_value.grid(row=2, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_karam_img = tk.Label(c_blighted, image=self.img_item_list[16], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_karam_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_karam_img.grid(row=2, column=4, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_karam_value.grid(row=2, column=5, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_manta_img = tk.Label(c_blighted, image=self.img_item_list[17], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_manta_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_manta_img.grid(row=2, column=6, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_manta_value.grid(row=2, column=7, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_angler_img = tk.Label(c_blighted, image=self.img_item_list[13], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_angler_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_angler_img.grid(row=3, column=0, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_angler_value.grid(row=3, column=1, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_restore_img = tk.Label(c_blighted, image=self.img_item_list[19], background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_restore_value = tk.Label(c_blighted, text="Disabled", font=self.stand_font_small,  background="gray62", highlightbackground="gray62", bd=0, highlightthickness=0, relief='ridge')
+        self.lbl_restore_img.grid(row=3, column=2, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        self.lbl_restore_value.grid(row=3, column=3, padx=self.grid_x_spacing, pady=self.grid_y_spacing)
+        c_blighted.pack(side="top", anchor="w")
+        for i in range(8):
+            if i % 2 == 0:
+                c_blighted.grid_columnconfigure(i, minsize=35)
+            else:
+                c_blighted.grid_columnconfigure(i, minsize=80)
+
+        c_right.pack(side="right", anchor="n")
 
     def on_enter(self):
         self.btn_start['bg'] = "#17bda2"
@@ -201,6 +503,10 @@ class Application:
                         self.mediocre_drops(totalDrops)
 
 
+
+                    self.lbl_status.update_idletasks()
+
+
                 self.lbl_status['bg'] = "lime green"
                 self.lbl_status['text'] = "   Finished!   "
 
@@ -222,4 +528,5 @@ if __name__ == '__main__':
     root.iconbitmap(resource_path("images/revenants/revenant_imp.ico"))
     root.title("Osrs Revenant Drop Generator: Remake")
     a = Application(root)
+    root.configure(bg="gray62")
     root.mainloop()
