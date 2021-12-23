@@ -159,6 +159,8 @@ class Application:
         c_image.pack(side="top", padx=5, pady=5)
         c_bottom.pack(side="top", pady=(5, 35))
 
+        self.lbl_signature = self.lbl_mode = tk.Label(c_left, background=self.left_label_color, text="© RedX1000/CrownMauler", font=self.stand_font_small_bold)
+        self.lbl_signature.pack(side="top", anchor="w", padx=1, pady=1)
         c_left.pack(side="left")
 
 
