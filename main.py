@@ -98,7 +98,7 @@ class Application:
         c_left = tk.Canvas(main_frame, background=self.left_canvas_color, highlightbackground=self.left_canvas_color, bd=0, highlightthickness=0, relief='ridge')
 
         c_left_top = tk.Canvas(c_left, background=self.left_canvas_top_color, highlightbackground=self.left_canvas_top_color, bd=0)
-        self.lbl_title = tk.Label(c_left_top, text=" OSRS Revenant Drop Generator v1.0 ", font=self.title_font, background=self.left_canvas_top_color)
+        self.lbl_title = tk.Label(c_left_top, text=" OSRS Revenant Drop Generator v1.0.1 ", font=self.title_font, background=self.left_canvas_top_color)
         self.lbl_title.pack(padx=20)
         self.lbl_desc = tk.Label(c_left_top, text="Enter the amount of kills, choose whether you're skulled or not, select the revenant, set data display speed, and run the code!", font=self.desc_font, wraplength=450, background=self.left_canvas_top_color)
         self.lbl_desc.pack()
@@ -685,13 +685,13 @@ class Application:
             elif val in [14, 15]:  # Rune Warhammer
                 self.lbl_rhammer_value["text"] = int(self.lbl_rhammer_value["text"]) + 2
             elif val == 16:  # Dragon Dagger
-                self.lbl_staff_value["text"] = int(self.lbl_staff_value["text"]) + 2
+                self.lbl_dds_value["text"] = int(self.lbl_dds_value["text"]) + 2
             elif val == 17:  # Dragon Longsword
-                self.lbl_staff_value["text"] = int(self.lbl_staff_value["text"]) + 2
+                self.lbl_dlong_value["text"] = int(self.lbl_dlong_value["text"]) + 2
             elif val == 18:  # Dragon Platelegs
-                self.lbl_staff_value["text"] = int(self.lbl_staff_value["text"]) + random.randint(1, 2)
+                self.lbl_dlegs_value["text"] = int(self.lbl_dlegs_value["text"]) + random.randint(1, 2)
             elif val == 19:  # Dragon Plateskirt
-                self.lbl_staff_value["text"] = int(self.lbl_staff_value["text"]) + random.randint(1, 2)
+                self.lbl_dskirt_value["text"] = int(self.lbl_dskirt_value["text"]) + random.randint(1, 2)
             elif val in [20, 21, 22, 23, 24, 25]:  # Coal
                 self.lbl_coal_value["text"] = int(self.lbl_coal_value["text"]) + random.randint(30, 60)
             elif val in [26, 27, 28, 29, 30, 31]:  # Runite Ore
