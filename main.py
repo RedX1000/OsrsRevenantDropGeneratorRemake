@@ -83,8 +83,8 @@ class Application:
         self.revenant_data_var = tk.StringVar(parent)
         self.revenant_data_var.set("Select a revenant")
 
-        self.var_entry_kills = tk.IntVar(parent)
-        # self.var_entry_kills.set(0)
+        self.var_entry_kills = tk.StringVar(parent)
+        self.var_entry_kills.set("0")
 
         self.var_skulled = tk.IntVar(parent)
         self.var_skulled.set(2)
@@ -466,17 +466,22 @@ class Application:
     def menu(self):
         passed_try = True
         try:
-            if self.var_entry_kills.get() == "" or str(self.var_entry_kills.get()).isdigit():
-                pass
+            int(self.var_entry_kills.get())
         except:
-            self.lbl_status['bg'] = "Orange"
-            self.lbl_status['text'] = "Enter numbers"
             passed_try = False
+            self.lbl_status['bg'] = "Orange"
+            self.lbl_status['text'] = "Enter numbers only"
 
+        print(self.var_entry_kills.get())
         if self.revenant_data_var.get() == "Select a revenant" and passed_try == True:
             self.lbl_status['bg'] = "Orange"
             self.lbl_status['text'] = "Choose a revenant"
-
+        elif int(self.var_entry_kills.get()) < 0 and passed_try == True:
+            self.lbl_status['bg'] = "Orange"
+            self.lbl_status['text'] = "No negative/zero kills"
+        elif self.var_entry_kills.get().find("0") == 0 and passed_try == True:
+            self.lbl_status['bg'] = "Orange"
+            self.lbl_status['text'] = "No leading zeroes"
         elif passed_try == True:
             try:
                 self.lbl_status['bg'] = "yellow"
@@ -484,7 +489,9 @@ class Application:
                 self.lbl_status.update_idletasks()
 
                 skull = self.var_skulled.get()
-                kills = self.var_entry_kills.get()
+                print(self.var_entry_kills.get())
+                kills = str(self.var_entry_kills.get())
+                kills = int(kills)
                 data = self.revenant_data[self.revenant_data_var.get()]
                 level = data[0]
                 hp = data[1]
