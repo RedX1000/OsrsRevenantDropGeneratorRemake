@@ -70,14 +70,14 @@ class Application:
                               'Revenant knight': [126, 143],
                               'Revenant dragon': [135, 155]}
 
-        with open("images/items/item_list.txt", 'r') as f:
+        with open(resource_path('images/items/item_list.txt'), 'r') as f:
             self.item_list = [line.strip() for line in f]
         self.img_item_list = []
         for i in range(len(self.item_list)):
             if i == 0:
-                temp = self.item_list[0]
+                temp = resource_path(self.item_list[0])
             else:
-                temp = tk.PhotoImage(file=("images/items/" + self.item_list[i]))
+                temp = tk.PhotoImage(file=(resource_path("images/items/" + self.item_list[i])))
             self.img_item_list.append(temp)
 
         self.revenant_data_var = tk.StringVar(parent)
@@ -152,7 +152,7 @@ class Application:
         # Old color for c_image and revenant_photo_lbl was #219581
         c_bottom = tk.Canvas(c_left, width=365, height=365, background="#13564a", highlightbackground="#13564a", bd=5, borderwidth=5)
         c_image = tk.Canvas(c_bottom, width=350, height=350, background="#1d8674", highlightbackground="#1d8674", bd=0, highlightthickness=0, relief='ridge')
-        self.revenant_image = PIL.Image.open("images/revenants/Select a revenant.png")
+        self.revenant_image = PIL.Image.open(resource_path("images/revenants/Select a revenant.png"))
         self.revenant_photo_image = PIL.ImageTk.PhotoImage(self.revenant_image)
         self.revenant_photo_lbl = tk.Label(c_image, image=self.revenant_photo_image, width=350, height=350, bg="#1d8674", highlightbackground="#219581", bd=0, highlightthickness=1, relief='ridge')
         self.revenant_photo_lbl.pack(padx=10, pady=10)
@@ -435,7 +435,7 @@ class Application:
 
     def change_picture(self):
         # https://stackoverflow.com/questions/3482081
-        img = PIL.ImageTk.PhotoImage(Image.open("images/revenants/"+self.revenant_data_var.get()+".png"))
+        img = PIL.ImageTk.PhotoImage(Image.open(resource_path("images/revenants/"+self.revenant_data_var.get()+".png")))
         self.revenant_photo_lbl.configure(image=img)
         self.revenant_photo_lbl.image = img
 
